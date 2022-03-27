@@ -6,7 +6,7 @@ public class Brackets {
 	public static boolean isValid(String s) {
 		/*
 		 * Erstelle eine Hashmap die schließende
-		 + und oeffnende Klammern vom gleichen Typ miteinander assoziert.
+		 * und oeffnende Klammern vom gleichen Typ miteinander assoziert.
 		 */
 		HashMap<Character, Character> rbracs = new HashMap<>();
 		rbracs.put(')','(');
