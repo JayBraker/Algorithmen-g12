@@ -1,8 +1,19 @@
 import java.util.HashMap;
 import java.util.ArrayDeque;
 
+/** 
+ * class for Hausaufgabenblatt1
+ * 
+ * checks given String for 
+ * valid opening and closing brackets
+ * 
+ * author: Laura Mey, Christian Thelen, Josha Bartsch
+ */
 public class Brackets {
 
+	/**
+	 * check if the brackets in the given String s are valid
+	 */
 	public static boolean isValid(String s) {
 		/*
 		 * Erstelle eine Hashmap die schließende
