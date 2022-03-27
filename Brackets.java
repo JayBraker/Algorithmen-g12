@@ -1,18 +1,20 @@
 import java.util.HashMap;
 import java.util.ArrayDeque;
 
-/** 
+/**
+ * @author: Laura Mey, Christian Thelen, Josha Bartsch
  * class for Hausaufgabenblatt1
  * 
  * checks given String for 
  * valid opening and closing brackets
  * 
- * author: Laura Mey, Christian Thelen, Josha Bartsch
  */
 public class Brackets {
 
 	/**
 	 * check if the brackets in the given String s are valid
+	 * @param String String to check on valid brackets
+	 * @return True if the String contains a valid bracket sequence else false.
 	 */
 	public static boolean isValid(String s) {
 		/*
@@ -40,6 +42,9 @@ public class Brackets {
 		return true;
 	}
 
+	/*
+	 * Testing a given list of Strings for validity, print to stdout.
+	 */
 	public static void main(String[] args) {
 		String[] stringArr = {"( ( [ [ ] ] ) )", "( [ ) ]", "( [ ] ] )", "( ( ) ) )", "( ( )", "( { [ ] ) }", "Josha Bartscch"};
 		for(String s: stringArr){
