@@ -46,9 +46,14 @@ public class Brackets {
 	 * Testing a given list of Strings for validity, print to stdout.
 	 */
 	public static void main(String[] args) {
-		String[] stringArr = {"( ( [ [ ] ] ) )", "( [ ) ]", "( [ ] ] )", "( ( ) ) )", "( ( )", "( { [ ] ) }", "Josha Bartscch"};
-		for(String s: stringArr){
-			System.out.println(String.format("%-15s: %15s", s, String.valueOf(isValid(s))));
-		}
+		System.out.println(isValid("([)]"));
+		System.out.println(isValid("([[])"));
+		System.out.println(isValid("(()))"));
+		System.out.println(isValid("(()"));
+		System.out.println(isValid("( { [ ] ) }"));
+		System.out.println(isValid("adfkjlskdf"));
+		System.out.println(isValid("as[df(asdfsdf)k{s}l]d"));
+		System.out.println(isValid("asdf(asdfsdf)ksl[d"));
+
 	}
 }
