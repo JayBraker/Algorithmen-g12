@@ -21,8 +21,7 @@ public class MyHashSet<K> {
 		if (contains(element)) {
 			return false;
 		} else {
-			ArrayList<K> temp = myHashTable.get(hashFunction(element));
-			temp.add(element);
+			myHashTable.get(hashFunction(element)).add(element);
 			totalCount++;
 			rehash();
 			return true;
@@ -33,8 +32,7 @@ public class MyHashSet<K> {
 		if (!contains(element)) {
 			return false;
 		} else {
-			ArrayList<K> temp = myHashTable.get(hashFunction(element));
-			temp.remove(element);
+			myHashTable.get(hashFunction(element)).remove(element);
 			totalCount--;
 			return true;
 		}
@@ -54,8 +52,7 @@ public class MyHashSet<K> {
 	}
 
 	public boolean contains(K element) {
-		ArrayList<K> temp = myHashTable.get(hashFunction(element));
-		return temp.contains(element);
+		return myHashTable.get(hashFunction(element)).contains(element);
 	}
 
 	public ArrayList<K> getElements() {
