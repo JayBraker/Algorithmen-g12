@@ -10,18 +10,17 @@ import java.util.Hashtable;
  * 
  * Implementation of a HashSet using an ArrayList of ArrayLists
  */
-public class MyHashSet2WithHashTables<K> {
+public class MyHashSet<K> {
 	
 
 	private Hashtable<Integer, ArrayList<K>> hashList;
-	//private ArrayList<K> rehashList;
 	private int elementCount;
 	private int listCount;
 	
 	/**
 	 * Creates a HashSet of type K
 	 */
-	public MyHashSet2WithHashTables() {
+	public MyHashSet() {
 		hashList = new Hashtable<Integer, ArrayList<K>>();
 		for(int i = 0; i<10;i++) {
 			hashList.put(i,new ArrayList<K>());
@@ -89,9 +88,15 @@ public class MyHashSet2WithHashTables<K> {
 		return false;
 	}
 	
+	private int hashfunction(K element) {
+		return element.hashCode()%listCount;
+		
+	}
+	
 	private void rehash() {
 		listCount*=2;
-		for(int i = listCount/2; i < listCount; i++) {
+		hashList = new Hashtable<Integer, ArrayList<K>>();
+		for (int i = 0; i < this.listCount; i++) {
 			hashList.put(i, new ArrayList<K>());
 		}
 		ArrayList<K> copy = getElements();
