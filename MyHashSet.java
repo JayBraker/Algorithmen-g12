@@ -40,8 +40,8 @@ public class MyHashSet<K> {
 		}
 	}
 
-	public void rehash() {
-		if ((totalCount / myHashTable.size()) > 2) {
+	private void rehash() {
+		if (((double) totalCount / myHashTable.size()) > 2) {
 			MyHashSet<K> temp = new MyHashSet<>(myHashTable.size()*2);
 			for (K el : getElements())
 				temp.add(el);
@@ -49,7 +49,7 @@ public class MyHashSet<K> {
 		}
 	}
 
-	public int hashFunction(K element) {
+	private int hashFunction(K element) {
 		return Math.abs(element.hashCode() % myHashTable.size());
 	}
 
