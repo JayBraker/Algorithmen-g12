@@ -2,14 +2,33 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Collections;
 
+
+/**
+ * Algorithmen & Datenstrukturen - Hausaufgabe 2
+ * 
+ * This class implements a Hashset, using a Hashtable with ArrayLists 
+ * and the division algorithm for the hash function of objects.
+ * 
+ * @author Laura Mey, Christian Thelen, Josha Bartsch
+ *
+ * @param <K> data type of the elements of the set
+ */
 public class MyHashSet<K> {
 	private Hashtable<Integer, ArrayList<K>> myHashTable;
-	private int totalCount;
+	private int totalCount; //total number of elements saved in the hashset
 
+	/**
+	 * Default constructor: Initialize with 10 sub lists.
+	 */
 	public MyHashSet () {
 		this(10);
 	}
 
+
+	/**
+	 * Constructor with varible count of sub lists.
+	 * @param int Number of sublist to initialize the hashset with
+	 */
 	public MyHashSet (int fieldCount) {
 		myHashTable = new Hashtable<>(fieldCount);
 		for(int i = 0; i<fieldCount; i++) {
@@ -17,6 +36,12 @@ public class MyHashSet<K> {
 		}
 	}
 
+	
+	/**
+	 * Add element to hashset
+	 * @param element to be added
+	 * @return true if the element already exists
+	 */
 	public boolean add(K element) {
 		if (contains(element)) {
 			return false;
@@ -28,6 +53,12 @@ public class MyHashSet<K> {
 		}
 	}
 
+	/**
+	 * Removes elment from hashset, without changing the number of lists
+	 * 
+	 * @param element to be deleted
+	 * @return true if the element existed
+	 */
 	public boolean delete(K element) {
 		if (!contains(element)) {
 			return false;
@@ -38,6 +69,11 @@ public class MyHashSet<K> {
 		}
 	}
 
+	/**
+	 * Rehash the Hashset by doubling the number of lists and re-adding all 
+	 * elements
+	 *  
+	 */
 	private void rehash() {
 		if (((double) totalCount / myHashTable.size()) > 2) {
 			MyHashSet<K> temp = new MyHashSet<>(myHashTable.size()*2);
@@ -47,14 +83,29 @@ public class MyHashSet<K> {
 		}
 	}
 
+	/**
+	 * Hashfunction, calculates modulo of hashcode by number of lists
+	 * 
+	 * @param K element to be hashed
+	 * @return int number that is the key where the object will be saved
+	 * 
+	 */
 	private int hashFunction(K element) {
 		return Math.abs(element.hashCode() % myHashTable.size());
 	}
 
+	/**
+	 * Is element present in hashset?
+	 * @return boolean
+	 */
 	public boolean contains(K element) {
 		return myHashTable.get(hashFunction(element)).contains(element);
 	}
 
+	/**
+	 * Get all elements in the hashset
+	 * @return ArrayList<K> of all elements
+	 */
 	public ArrayList<K> getElements() {
 		ArrayList<K> ret = new ArrayList<>();
 		
