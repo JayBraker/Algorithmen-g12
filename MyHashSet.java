@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 
 /**
@@ -9,10 +10,10 @@ import java.util.ArrayList;
  * 
  * Implementation of a HashSet using an ArrayList of ArrayLists
  */
-public class MyHashSet<K> {
+public class MyHashSet2WithHashTables<K> {
 	
 
-	private ArrayList<ArrayList<K>> hashList;
+	private Hashtable<Integer, ArrayList<K>> hashList;
 	//private ArrayList<K> rehashList;
 	private int elementCount;
 	private int listCount;
@@ -20,11 +21,10 @@ public class MyHashSet<K> {
 	/**
 	 * Creates a HashSet of type K
 	 */
-	public MyHashSet() {
-		//rehashList = new ArrayList<K>();
-		hashList = new ArrayList<ArrayList<K>>();
+	public MyHashSet2WithHashTables() {
+		hashList = new Hashtable<Integer, ArrayList<K>>();
 		for(int i = 0; i<10;i++) {
-			hashList.add(new ArrayList<K>());
+			hashList.put(i,new ArrayList<K>());
 		}
 		listCount = 10;
 	}
@@ -37,11 +37,10 @@ public class MyHashSet<K> {
 	 */
 	public boolean add(K element) {
 		int index = element.hashCode()%listCount;
-		if(hashList.get(index).contains(element)) {
+		if(hashList.get(index).contains(element)){
 			return false;
 		}
 		hashList.get(index).add(element);
-		//rehashList.add(element);
 		if(needsRehash()) {
 			rehash();
 		}
@@ -67,10 +66,9 @@ public class MyHashSet<K> {
 	 */
 	public ArrayList<K> getElements() {
 		ArrayList<K> allElements = new ArrayList<>();
-		for(int i = 0; i< hashList.size(); i++) {
-			for(int j = 0; j < hashList.get(i).size(); j++) {
-				allElements.add(hashList.get(i).get(j));
-			}
+		for (ArrayList<K> list : hashList.values()) {
+			for (K i : list)
+				allElements.add(i);
 		}
 		return allElements;
 		
@@ -94,31 +92,13 @@ public class MyHashSet<K> {
 	private void rehash() {
 		listCount*=2;
 		for(int i = listCount/2; i < listCount; i++) {
-			hashList.add(new ArrayList<K>());
+			hashList.put(i, new ArrayList<K>());
 		}
-		for(int i = 0; i< hashList.size(); i++) {
-			for(int j = 0; j < hashList.get(i).size(); j++) {
-				this.add((hashList.get(i).get(j)));
+		ArrayList<K> copy = getElements();
+			for(int j = 0; j < copy.size(); j++) {
+				this.add(copy.get(j));
 			}
 		}
 	}
 	
-	//public ArrayList<K> getElements(){
-			//return rehashList;
-		//}
 	
-	
-	//private void rehash() {
-		//listCount*=2;
-		//hashList.clear();
-		//for(int i = 0; i< listCount; i++) {
-			//hashList.add(new ArrayList<K>());
-		//}
-		//for(int i = 0; i<rehashList.size(); i++) {
-			//int index = rehashList.get(i).hashCode()%listCount;
-			//hashList.get(index).add(rehashList.get(i));
-		//}
-	//}
-	
-	
-}
