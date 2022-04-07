@@ -1,9 +1,18 @@
 import java.util.Iterator;
 
+/**
+ * Class LinkedList implements IList and Iterable interfaces.
+ * Implementation of a linked list, items are accessible through indices.
+ * 
+ * @author Christian Thelen, Laura Mey, Josha Bartsch
+ */
 public class LinkedList<T> implements IList<T>, Iterable<T> {
 	private Node<T>head;
 	private int count;
 
+	/**
+	 * Sub class representing list elements.
+	 */
 	private class Node<T> {
 		public Node<T>next;
 		public final T content;
@@ -14,11 +23,17 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		}
 	}
 
+	/**
+	 * Initialize with HEAD ref null and count/size 0.
+	 */
 	public LinkedList() {
 		this.head = null;
 		this.count = 0;
 	}
-
+	/**
+	 * @param int index at which the item is to be inserted
+	 * @param T value that is to be inserted
+	 */
 	@Override
 	public void insertAt(int index, T element) {
 		if (index > count+1)
@@ -34,6 +49,11 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		insertAfter(pointer, element);
 	}
 
+	/**
+	 * 
+	 * @param pointer pointer to the ref node after which the element should be inserted.
+	 * @param element value to be inserted.
+	 */
 	public void insertAfter(Node<T> pointer, T element) {
 		Node<T> new_node = new Node<>(element);
 		Node<T> after = pointer.next;
@@ -42,6 +62,10 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		count++;
 	}
 
+	/**
+	 * To delete a node we remove any reference to it - gc will take care of it.
+	 * @param int index of the node to be removed
+	 */
 	@Override
 	public T removeAt(int index) {
 		if (index >= count)
@@ -56,6 +80,11 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		return node.content;
 	}
 
+	/**
+	 * Return node value present at index
+	 * 
+	 * @param int index
+	 */
 	@Override
 	public T getAt(int index) {
 		if (index >= count)
@@ -67,6 +96,11 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		return pointer.content;
 	}
 
+	/**
+	 * Get node object at index
+	 * @param index
+	 * @return node ref at index
+	 */
 	public Node<T> nodeAt(int index) {
 		if (index > count)
 			throw new ArrayIndexOutOfBoundsException();
@@ -77,6 +111,10 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		return pointer;
 	}
 
+	/**
+	 * traverses through all nodes until it matches the first element.
+	 * @param element value to be searched
+	 */
 	@Override
 	public int search(T element) {
 		boolean found = false;
@@ -93,17 +131,27 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 		return i;
 	}
 
+	/**
+	 * Remove all references to nodes, set size to 0.
+	 */
 	@Override
 	public void clear() {
 		head = null;
 		count = 0;
 	}
 
+	/**
+	 * Expose size attribute.
+	 */
 	@Override
 	public int getCount() {
 		return count;
 	}
 
+	/**
+	 * Implementation of Iterable
+	 * @return Iterator for LinkedList
+	 */
 	@Override
 	public Iterator<T> iterator() {
     	return new Iterator<T>() {
