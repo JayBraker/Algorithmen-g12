@@ -57,6 +57,11 @@ class LinkedListTest {
     public void testSearch() {
         assertEquals(3, list.search(4), "testSearch");
     }
+
+    @Test
+    public void testSearchNoMatch() {
+        assertEquals(-1, list.search(42), "If element is not present, -1 is returned.");
+    }
     
     @Test 
     public void testClear() {
@@ -75,6 +80,9 @@ class LinkedListTest {
             list.insertAt(10, 7);
         }, "InsertException");
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+          list.insertAt(-1, 7);
+      }, "InsertExceptionNegativeNumber");
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
             list.removeAt(10);
         }, "RemoveException");
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
@@ -83,6 +91,12 @@ class LinkedListTest {
         assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
             list.getAt(-2);
         }, "GetExceptionNegativeNumber");
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+          list.nodeAt(42);
+        }, "GetNodeException");
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+          list.nodeAt(-42);
+        }, "GetNodeExceptionNegativeNumber");
     }
     
 
