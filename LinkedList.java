@@ -21,22 +21,14 @@ public class LinkedList implements IList {
 	
 	public void insertAt(int pos, int i) {
 		Node n = new Node(i);
-		
-		if(this.first == null && pos > 0) {
-			throw new ArrayIndexOutOfBoundsException();
-		}
+	
 		if (pos < 0 || pos > elementCount) {
 			throw new ArrayIndexOutOfBoundsException();
 		}
 		if (pos == 0) {
-			if (first == null) {
-				first = n;
-				elementCount++;
-			} else {
 				n.next = first;
 				first = n;
 				elementCount++;
-			}
 		}
 		else {
 			int counter = 0;
