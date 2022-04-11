@@ -36,7 +36,7 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 	 */
 	@Override
 	public void insertAt(int index, T element) {
-		if (index > count+1)
+		if (index > count || index < 0)
 			throw new ArrayIndexOutOfBoundsException();
 		if (index == 0) {
 			Node<T>new_node = new Node<>(element);
@@ -50,7 +50,6 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 	}
 
 	/**
-	 * 
 	 * @param pointer pointer to the ref node after which the element should be inserted.
 	 * @param element value to be inserted.
 	 */
@@ -68,14 +67,14 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 	 */
 	@Override
 	public T removeAt(int index) {
-		if (index >= count)
+		if (index >= count || index < 0)
 			throw new ArrayIndexOutOfBoundsException();
 		Node<T> node = nodeAt(index);
 		if (index > 0) {
 			Node<T> prev_node = nodeAt(index-1);
 			prev_node.next = node.next;
 		} else if (index == 0)
-			head = null;
+			head = node.next;
 		count--;
 		return node.content;
 	}
@@ -87,7 +86,7 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 	 */
 	@Override
 	public T getAt(int index) {
-		if (index >= count)
+		if (index >= count || index < 0)
 			throw new ArrayIndexOutOfBoundsException();
 		Node<T> pointer = head;
 		for (int i = 0; i < index; i++){
@@ -102,7 +101,7 @@ public class LinkedList<T> implements IList<T>, Iterable<T> {
 	 * @return node ref at index
 	 */
 	public Node<T> nodeAt(int index) {
-		if (index > count)
+		if (index > count || index < 0)
 			throw new ArrayIndexOutOfBoundsException();
 		Node<T> pointer = head;
 		for (int i = 0; i < index; i++){
