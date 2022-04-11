@@ -14,11 +14,11 @@ import org.junit.jupiter.api.Test;
  *
  */
 class testList {
-	LinkedList<Integer> list;
+	LinkedList list;
 	
 	@BeforeEach
 	public void setUp() {
-		this.list = new LinkedList<>();
+		this.list = new LinkedList();
 		list.insertAt(0, 1);
 		list.insertAt(1, 2);
 		list.insertAt(2, 3);
@@ -37,6 +37,13 @@ class testList {
 		list.removeAt(1);
 		assertEquals(3, list.getAt(1), "testRemove");
 		assertEquals(3, list.getCount(), "testRemoveCount");
+	}
+	
+	@Test
+	public void testRemoveFirst() {
+		list.removeAt(0);
+		assertEquals(2, list.getAt(0), "testRemoveFirst");
+		assertEquals(3, list.getCount(), "testRemoveFirstCount");
 	}
 	
 	@Test
@@ -77,5 +84,9 @@ class testList {
 			list.getAt(-2);
 		}, "GetExceptionNegativeNumber");
 	}
+	
+
+
+	
 
 }

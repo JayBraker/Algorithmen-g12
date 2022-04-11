@@ -7,24 +7,23 @@ import java.util.ArrayList;
  * and nodes and allowing elementary operations such as inserting, removing,
  * getting, clearing and searching the list
  * 
- * References used: - Algorithmen Ü3, -
+ * References used: - Algorithmen Uebung 3, -
  * https://www.geeksforgeeks.org/doubly-linked-list/ , -
  * https://www.geeksforgeeks.org/write-a-function-to-get-nth-node-in-a-linked-list/
  * 
  * @author Christian Thelen, Joshua Bartsch, Laura Mey
  *
- * @param <T> type parameter, used as Integer only
  */
-public class LinkedList<T> implements IList {
-	Node head;
-	int size = 0; // number of nodes in the list
+public class LinkedList implements IList {
+	private Node head;
+	private int size; // number of nodes in the list
 
 	/**
 	 * Subclass that provides nodes with data and successors
 	 */
-	class Node {
-		int data;
-		Node next;
+	private class Node {
+		private int data;
+		private Node next;
 
 		Node(int d) { // constructor to put data inside a node object
 			data = d;
@@ -39,38 +38,31 @@ public class LinkedList<T> implements IList {
 	 * @param value    int to be inserted at the position
 	 * @throws ArrayIndexOutOfBoundsException if position is invalid
 	 */
+	@Override
 	public void insertAt(int position, int value) {
-		if (position < 0 || (position > this.getCount())) {
+		if (position < 0 || (position > size)) {
 			throw new ArrayIndexOutOfBoundsException("Index out of bounds");
 		}
 
 		Node new_Node = new Node(value);
 
-		// in case of empty list, simply put the new node as head
-		if (head == null) {
+		// insert at first position
+		if (position == 0) {
+			new_Node.next = head;
 			head = new_Node;
-			this.size++;
+			// add after the last position
+		} else if (position == size) {
+			Node prev_Node = this.getNode(position - 1);
+			prev_Node.next = new_Node;
+			new_Node.next = null;
+			// insert somewhere in the middle
+		} else {
+			Node next_Node = this.getNode(position);
+			Node prev_Node = this.getNode(position - 1);
+			new_Node.next = next_Node;
+			prev_Node.next = new_Node;
 		}
-
-		else {
-			// insert at first position
-			if (position == 0) {
-				new_Node.next = head;
-				head = new_Node;
-				// add after the last position
-			} else if (position == this.getCount()) {
-				Node prev_Node = this.getNode(position - 1);
-				prev_Node.next = new_Node;
-				new_Node.next = null;
-				// insert somewhere in the middle
-			} else {
-				Node next_Node = this.getNode(position);
-				Node prev_Node = this.getNode(position - 1);
-				new_Node.next = next_Node;
-				prev_Node.next = new_Node;
-			}
-			this.size++;
-		}
+		this.size++;
 
 	}
 
@@ -81,13 +73,8 @@ public class LinkedList<T> implements IList {
 	 * @throws ArrayIndexOutOfBoundsException if position is invalid
 	 */
 	public void removeAt(int position) {
-		if (position < 0 || position >= this.getCount()) {
+		if (position < 0 || position >= size) {
 			throw new ArrayIndexOutOfBoundsException("Index out of bounds");
-		}
-
-		// empty list -> nothing to remove
-		if (head == null) {
-			return;
 		}
 
 		// remove first node
@@ -96,7 +83,7 @@ public class LinkedList<T> implements IList {
 		} else {
 			Node prev_Node = this.getNode(position - 1);
 			// remove a node between the first and last one
-			if ((position + 1) < this.getCount()) {
+			if ((position + 1) < size) {
 				prev_Node.next = this.getNode(position + 1);
 			}
 			// remove last node
@@ -117,7 +104,7 @@ public class LinkedList<T> implements IList {
 	 * @throws ArrayIndexOutOfBoundsException if position is invalid
 	 */
 	public Node getNode(int position) {
-		if (position < 0 || position >= this.getCount()) {
+		if (position < 0 || position >= size) {
 			throw new ArrayIndexOutOfBoundsException("Index out of bounds");
 		}
 
@@ -142,7 +129,7 @@ public class LinkedList<T> implements IList {
 	 * @throws ArrayIndexOutOfBoundsException if position is invalid
 	 */
 	public int getAt(int position) {
-		if (position < 0 || position >= this.getCount()) {
+		if (position < 0 || position >= size) {
 			throw new ArrayIndexOutOfBoundsException("Index out of bounds");
 		}
 
@@ -207,4 +194,3 @@ public class LinkedList<T> implements IList {
 	}
 
 }
-
