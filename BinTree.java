@@ -1,5 +1,3 @@
-package ha4;
-
 /**
  * Algorithmen HA4
  * 
