@@ -1,126 +1,164 @@
+
 /**
- * Algorithmen Hausaufgaben 4
- * Implementation of a binary searchtree.
+ * Algorithmen HA4
  * 
- * @author Josha Bartsch, Laura Mey, Chrisitan Thelen
+ * BinTree Class implements a binary search tree with fundamental operations
+ * such as searching, inserting and removing.
+ * 
+ * @author Christian Thelen, Josha Bartsch, Laura Mey
+ *
  */
 public class BinTree {
-	/**
-	 * Subclass representing a binary tree node.
-	 */
-	private class Node {
-		int data;
-		Node right;
-		Node left;
-
-		Node(int data) {
-			this.data = data;
-		}
-		
-		public String toString() {
-			return String.valueOf(data);
-		}
-	}
-
-	private Node root;
+	Node root; // start node
 
 	/**
-	 * Insert an integer into the tree beginning at the root.
-	 * 
-	 * @param x
-	 */
-	public void insert(int x) {
-		Node node = new Node(x);
-		if (root == null)
-			root = node;
-		else
-			insert(root, node);		
-	}
-
-	/**
-	 * Insert a note into a given subtree.
-	 * Throws an ArithmeticException if the value is already present in the tree.
+	 * Supportive class that provides nodes that the tree is made of. Each node has
+	 * the int value that it contains and references its right and left successor
 	 *
-	 * @param node root to start the insertion at
-	 * @param newNode node to be inserted
 	 */
-	public void insert(Node node, Node newNode) {
-		if (newNode.data == node.data) {
-			throw new ArithmeticException("Value is already present in tree.");
-		} else if (newNode.data > node.data) {
-			if (node.right != null) {
-				insert(node.right, newNode);
+	class Node {
+		int data;
+		Node left_child;
+		Node right_child;
+
+		// Constructor
+		public Node(int new_data) {
+			data = new_data;
+			left_child = null;
+			right_child = null;
+		}
+
+		void appendLeft(Node node) {
+			if (node == null)
 				return;
-			}
-			node.right = newNode;
-		} else {
-			if (node.left != null) {
-				insert(node.left, newNode);
-				return;
-			}
-			node.left = newNode;
+			if (left_child != null)
+				left_child.appendLeft(node);
+			else
+				left_child = node;
 		}
 	}
 
 	/**
-	 * Search for a node beginning at the provided node.
+	 * Searches for a value
 	 * 
-	 * @param r "root" of this search
-	 * @param x int value to find the parent to
-	 * @return node containing x or null if x is not in the tree
-	 */
-	public Node getNode(Node r, int x) {
-		if (r == null)
-			return null;
-		if (r.data == x)
-			return r;
-		else if (r.left != null && r.data > x)
-			return getNode(r.left, x);
-		else if (r.right !=  null && r.data < x)
-			return getNode(r.right, x);
-		return null;
-	}
-
-	/**
-	 * Search for a node beginning at the trees root.
-	 * 
-	 * @param x int value to find the parent to
-	 * @return node 
+	 * @param x int value to search for
+	 * @return node that contains the value x (null if x does not exist in the tree)
 	 */
 	public Node getNode(int x) {
-		return getNode(root, x);
+		if (root == null || root.data == x) {
+			return root;
+		}
+		if (root.data < x) {
+			return getNode(root.right_child, x);
+		} else {
+			return getNode(root.left_child, x);
+		}
 	}
 
 	/**
-	 * Search for a nodes parent beginning at the provided node.
+	 * helper function to support recursion by looking for data in subtree with
+	 * given root node
 	 * 
-	 * @param r "root" of this search
-	 * @param x int value to find the parent to
-	 * @return parent or null if not present (root contains x or x not present in tree)
+	 * @param Node root is the node from which onwards to start looking
+	 * @param x    int value to search for
+	 * @return node that contains the value x
 	 */
-	public Node getParentNode(Node r, int x) {
-		if (r.data == x)
+	public Node getNode(Node root, int x) {
+		if (root == null || root.data == x) {
+			return root;
+		}
+		if (root.data < x) {
+			return getNode(root.right_child, x);
+		} else {
+			return getNode(root.left_child, x);
+		}
+
+	}
+
+	/**
+	 * Looks for the parent node of a value.
+	 * 
+	 * @param x int value for which to find the parent node
+	 * @return Node parent node of value x
+	 */
+	public Node getParentNode(int x) {
+		if (getNode(x) == null || root.data == x) {
 			return null;
-		else if (r.left != null && r.data > x) {
-			if (r.left.data == x)
-				return r;
-			return getParentNode(r.left, x);
-		} else if (r.right !=  null && r.data < x) {
-			if (r.right.data == x)
-				return r;
-			return getParentNode(r.right, x);
+		}
+		return getParentNode(root, x);
+
+	}
+
+	/**
+	 * Helper function to recursively find parent node
+	 * 
+	 * @param node starting point from which to look for value
+	 * @param x    int value for which to find the parent node
+	 * @return Node parent node of value x
+	 */
+	public Node getParentNode(Node node, int x) {
+		if (node.data==x) {
+			return node;
+		}
+		if (node.left_child != null) {
+			if (node.left_child.data > x) {
+				return getParentNode(node.left_child, x);
+			}
+			else if (node.left_child.data == x) {
+				return node;
+			}
+		}
+		if (node.right_child != null && node.data < x) {
+			if (node.right_child.data < x) {
+				return getParentNode(node.right_child, x);
+			}
+			else if (node.right_child.data == x) {
+				return node;
+			}
 		}
 		return null;
 	}
 
 	/**
-	 * Search for a nodes parent beginning at the root.
+	 * Insert a new value into the binary tree.
 	 * 
-	 * @param x int value to find the parent to
-	 * @return node 
+	 * @param x int value to be inserted
+	 * @throws ArithmeticException if value already exists
 	 */
-	public Node getParentNode(int x) {
-		return getParentNode(root, x);
+	public void insert(int x) {
+		if (getNode(x) != null) {
+			throw new ArithmeticException("Wert schon vorhanden.");
+		}
+		if (root == null) {
+			root = new Node(x);
+		} else {
+			insert(root, x);
+		}
+	}
+
+	/**
+	 * Helper function for recursion
+	 * This method remains private as external classes should only insert at the root.
+	 * Otherwise the idea of a binary tree is thrown overboard.
+	 * 
+	 * @param node from which to look for place to insert x
+	 * @param x    int value to be inserted
+	 * @return node newly inserted node
+	 */
+	private void insert(Node node, int x) {
+		if (x < node.data) {
+			if (node.left_child == null) {
+				node.left_child = new Node(x);
+			} else {
+				insert(node.left_child, x);
+			}
+		} else if (x > node.data) {
+			if (node.right_child == null) {
+				node.right_child = new Node(x);
+			} else {
+				insert(node.right_child, x);
+			}
+		}
 	}
 
 	/**
@@ -131,36 +169,55 @@ public class BinTree {
 	}
 
 	/**
-	 * Looks up the node containing the value x and its parents.
-	 * Inserts all child nodes after removing the node in question from its parent.
+	 * Delete a value x from the binary search tree.
 	 * 
-	 * @param x    value of the node to be removed
+	 * @param x int value to be deleted
+	 * @throws ArithmeticException if value x does not exist in the tree
 	 */
 	public void remove(int x) {
-		Node parentNode = getParentNode(x);
-		Node node;
-		if (parentNode == null)
-			node = getNode(x);
-		else 
-			node = getNode(parentNode, x);
+		if (getNode(x) == null) {
+			throw new ArithmeticException("Value does not exist in the tree.");
+		}
+		root = remove(root, x);
+	}
 
-		if (node == null)
-			throw new ArithmeticException();
-		if (parentNode != null) {
-			if (parentNode.left == node)
-				parentNode.left = null;
-			else
-				parentNode.right = null;
-			if (node.right != null)
-				insert(parentNode, node.right);
-			if (node.left != null)
-				insert(parentNode, node.left);
+	/**
+	 * Deletion strategy: Traverse until you find the appropriate node, if no children are present replace its reference with null.
+	 * If a right child is present, move the left child to the most left leaf of the right subtree, make the right child the new root.
+	 * If no right child is present, make the left child new root.
+	 * 
+	 * This method remains private as external classes should only delete elements without regard to their position in the tree (each element is unique anyway)
+	 * Otherwise the idea of a binary tree is thrown overboard.
+	 * 
+	 * @param node Node starting point to search for the value
+	 * @param x    int value to be removed
+	 */
+	private Node remove(Node node, int x) {
+		if (node == null) {
+			return node;
+		}
+		if (x < node.data) {
+			node.left_child = remove(node.left_child, x);
+			return node;
+
+		} else if (x > node.data) {
+			node.right_child = remove(node.right_child, x);
+			return node;
+
 		} else {
-			root = node.right;
-			insert(root, node.left);
+			if (node.right_child != null) {
+				node.right_child.appendLeft(node.left_child);
+				return node.right_child;
+			} else if (node.left_child != null)
+				return node.left_child;
+			return null;
 		}
 	}
 
+	/**
+	 * test class for class BinTree (copied from the assignment, plus removal test)
+	 * 
+	 */
 	public static void main(String[] args) {
 		BinTree tree = new BinTree();
 		tree.insert(20);
@@ -178,6 +235,6 @@ public class BinTree {
 		}
 		tree.remove(30);
 		System.out.println("Knoten geloescht: 30");
-		System.out.println("Elternknoten von 50: " + tree.getParentNode(50).data);// 20 }
+		System.out.println("Elternknoten von 50: " + tree.getParentNode(50).data);// 20
 	}
 }
