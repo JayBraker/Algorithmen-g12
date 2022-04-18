@@ -1,4 +1,13 @@
+/**
+ * Algorithmen Hausaufgaben 4
+ * Implementation of a binary searchtree.
+ * 
+ * @author Josha Bartsch, Laura Mey, Chrisitan Thelen
+ */
 public class BinTree {
+	/**
+	 * Subclass representing a binary tree node.
+	 */
 	private class Node {
 		int data;
 		Node right;
@@ -15,33 +24,54 @@ public class BinTree {
 
 	private Node root;
 
+	/**
+	 * Insert an integer into the tree beginning at the root.
+	 * 
+	 * @param x
+	 */
 	public void insert(int x) {
 		Node node = new Node(x);
 		if (root == null)
 			root = node;
 		else
-			insertAfter(root, node);		
+			insert(root, node);		
 	}
 
-	public void insertAfter(Node node, Node newNode) {
+	/**
+	 * Insert a note into a given subtree.
+	 * Throws an ArithmeticException if the value is already present in the tree.
+	 *
+	 * @param node root to start the insertion at
+	 * @param newNode node to be inserted
+	 */
+	public void insert(Node node, Node newNode) {
 		if (newNode.data == node.data) {
 			throw new ArithmeticException("Value is already present in tree.");
 		} else if (newNode.data > node.data) {
 			if (node.right != null) {
-				insertAfter(node.right, newNode);
+				insert(node.right, newNode);
 				return;
 			}
 			node.right = newNode;
 		} else {
 			if (node.left != null) {
-				insertAfter(node.left, newNode);
+				insert(node.left, newNode);
 				return;
 			}
 			node.left = newNode;
 		}
 	}
 
+	/**
+	 * Search for a node beginning at the provided node.
+	 * 
+	 * @param r "root" of this search
+	 * @param x int value to find the parent to
+	 * @return node containing x or null if x is not in the tree
+	 */
 	public Node getNode(Node r, int x) {
+		if (r == null)
+			return null;
 		if (r.data == x)
 			return r;
 		else if (r.left != null && r.data > x)
@@ -51,10 +81,23 @@ public class BinTree {
 		return null;
 	}
 
+	/**
+	 * Search for a node beginning at the trees root.
+	 * 
+	 * @param x int value to find the parent to
+	 * @return node 
+	 */
 	public Node getNode(int x) {
 		return getNode(root, x);
 	}
 
+	/**
+	 * Search for a nodes parent beginning at the provided node.
+	 * 
+	 * @param r "root" of this search
+	 * @param x int value to find the parent to
+	 * @return parent or null if not present (root contains x or x not present in tree)
+	 */
 	public Node getParentNode(Node r, int x) {
 		if (r.data == x)
 			return null;
@@ -70,17 +113,36 @@ public class BinTree {
 		return null;
 	}
 
+	/**
+	 * Search for a nodes parent beginning at the root.
+	 * 
+	 * @param x int value to find the parent to
+	 * @return node 
+	 */
 	public Node getParentNode(int x) {
 		return getParentNode(root, x);
 	}
 
+	/**
+	 * Clears the binary search tree by deleting its root value
+	 */
 	public void clear() {
 		root = null;
 	}
 
+	/**
+	 * Looks up the node containing the value x and its parents.
+	 * Inserts all child nodes after removing the node in question from its parent.
+	 * 
+	 * @param x    value of the node to be removed
+	 */
 	public void remove(int x) {
 		Node parentNode = getParentNode(x);
-		Node node = getNode(x);
+		Node node;
+		if (parentNode == null)
+			node = getNode(x);
+		else 
+			node = getNode(parentNode, x);
 
 		if (node == null)
 			throw new ArithmeticException();
@@ -90,12 +152,12 @@ public class BinTree {
 			else
 				parentNode.right = null;
 			if (node.right != null)
-				insertAfter(parentNode, node.right);
+				insert(parentNode, node.right);
 			if (node.left != null)
-				insertAfter(parentNode, node.left);
+				insert(parentNode, node.left);
 		} else {
 			root = node.right;
-			insertAfter(root, node.left);
+			insert(root, node.left);
 		}
 	}
 
