@@ -129,6 +129,8 @@ public class BinTree {
 
 	/**
 	 * Helper function for recursion
+	 * This method remains private as external classes should only insert at the root.
+	 * Otherwise the idea of a binary tree is thrown overboard.
 	 * 
 	 * @param node from which to look for place to insert x
 	 * @param x    int value to be inserted
@@ -173,6 +175,8 @@ public class BinTree {
 	/**
 	 * helper function to recursively retrieve the node that contains the value that
 	 * should be removed
+	 * This method remains private as external classes should only delete elements without regard to their position in the tree (each element is unique anyway)
+	 * Otherwise the idea of a binary tree is thrown overboard.
 	 * 
 	 * @param node Node starting point to search for the value
 	 * @param x    int value to be removed
