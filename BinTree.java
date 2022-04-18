@@ -1,3 +1,4 @@
+
 /**
  * Algorithmen HA4
  * 
@@ -72,11 +73,8 @@ public class BinTree {
 	 * @return Node parent node of value x
 	 */
 	private Node getParentNode(int x) {
-		if (getNode(x)==null) {
+		if (getNode(x) == null || root.data == x) {
 			return null;
-		}
-		if (root.data == x) {
-			return root;
 		}
 		return getParentNodeRec(root, x);
 
@@ -86,20 +84,30 @@ public class BinTree {
 	 * Helper function to recursively find parent node
 	 * 
 	 * @param node starting point from which to look for value
-	 * @param x int value for which to find the parent node
+	 * @param x    int value for which to find the parent node
 	 * @return Node parent node of value x
 	 */
 	private Node getParentNodeRec(Node node, int x) {
-		if (node == null)
+		if (node.data==x) {
 			return node;
-
-		if (node.data == x) {
-			return node;
-		} else {
-			getParentNodeRec(node.left_child, x);
-			getParentNodeRec(node.right_child, x);
 		}
-		return node;
+		if (node.left_child != null) {
+			if (node.left_child.data > x) {
+				return getParentNodeRec(node.left_child, x);
+			}
+			else if (node.left_child.data == x) {
+				return node;
+			}
+		}
+		if (node.right_child != null && node.data < x) {
+			if (node.right_child.data < x) {
+				return getParentNodeRec(node.right_child, x);
+			}
+			else if (node.right_child.data == x) {
+				return node;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -112,31 +120,34 @@ public class BinTree {
 		if (getNode(x) != null) {
 			throw new ArithmeticException("Wert schon vorhanden.");
 		}
-		root = insertRecursive(root, x);
-
+		if (root == null) {
+			root = new Node(x);
+		} else {
+			insertRecursive(root, x);
+		}
 	}
 
 	/**
-	 * Helper function for recursion 
+	 * Helper function for recursion
 	 * 
 	 * @param node from which to look for place to insert x
-	 * @param x int value to be inserted
+	 * @param x    int value to be inserted
 	 * @return node newly inserted node
 	 */
-	private Node insertRecursive(Node node, int x) {
-		if (node == null) {
-			return new Node(x);
-		}
-
+	private void insertRecursive(Node node, int x) {
 		if (x < node.data) {
-			node.left_child = insertRecursive(node.left_child, x);
+			if (node.left_child == null) {
+				node.left_child = new Node(x);
+			} else {
+				insertRecursive(node.left_child, x);
+			}
 		} else if (x > node.data) {
-			node.right_child = insertRecursive(node.right_child, x);
-		} else {
-			return node;
+			if (node.right_child == null) {
+				node.right_child = new Node(x);
+			} else {
+				insertRecursive(node.right_child, x);
+			}
 		}
-
-		return node;
 	}
 
 	/**
@@ -214,6 +225,9 @@ public class BinTree {
 			System.out.println("Knoten 30" + " nicht gefunden.");
 		}
 		System.out.println("Elternknoten von 50: " + tree.getParentNode(50).data);// 20
+		tree.insert(5);
+		System.out.println(tree.getNode(5).data);
+		System.out.println("Elternknoten von 5: " + tree.getParentNode(5).data);// 10
 
 	}
 }
