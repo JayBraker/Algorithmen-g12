@@ -5,7 +5,7 @@
  * BinTree Class implements a binary search tree with fundamental operations
  * such as searching, inserting and removing.
  * 
- * @author Christian Thelen, Joshua Bartsch, Laura Mey
+ * @author Christian Thelen, Josha Bartsch, Laura Mey
  *
  */
 public class BinTree {
