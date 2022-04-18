@@ -27,6 +27,15 @@ public class BinTree {
 			left_child = null;
 			right_child = null;
 		}
+
+		void appendLeft(Node node) {
+			if (node == null)
+				return;
+			if (left_child != null)
+				left_child.appendLeft(node);
+			else
+				left_child = node;
+		}
 	}
 
 	/**
@@ -169,12 +178,14 @@ public class BinTree {
 		if (getNode(x) == null) {
 			throw new ArithmeticException("Value does not exist in the tree.");
 		}
-		remove(root, x);
+		root = remove(root, x);
 	}
 
 	/**
-	 * helper function to recursively retrieve the node that contains the value that
-	 * should be removed
+	 * Deletion strategy: Traverse until you find the appropriate node, if no children are present replace its reference with null.
+	 * If a right child is present, move the left child to the most left leaf of the right subtree, make the right child the new root.
+	 * If no right child is present, make the left child new root.
+	 * 
 	 * This method remains private as external classes should only delete elements without regard to their position in the tree (each element is unique anyway)
 	 * Otherwise the idea of a binary tree is thrown overboard.
 	 * 
@@ -194,11 +205,12 @@ public class BinTree {
 			return node;
 
 		} else {
-			if (node.left_child == null)
+			if (node.right_child != null) {
+				node.right_child.appendLeft(node.left_child);
 				return node.right_child;
-			else if (node.right_child == null)
+			} else if (node.left_child != null)
 				return node.left_child;
-			return node;
+			return null;
 		}
 	}
 
@@ -212,6 +224,7 @@ public class BinTree {
 		tree.insert(10);
 		tree.insert(30);
 		tree.insert(50);
+		tree.insert(5);
 		int[] testcases = { 30, 35, 50 };
 		for (int testcase : testcases) {
 			Node node = tree.getNode(testcase);
@@ -221,15 +234,13 @@ public class BinTree {
 				System.out.println("Knoten " + testcase + " gefunden: " + node.data);
 			}
 		}
-		tree.remove(30);
-		System.out.println("Knoten geloescht: 30");
-		Node node = tree.getNode(30);
+		tree.remove(20);
+		System.out.println("Knoten geloescht: 20");
+		Node node = tree.getNode(20);
 		if (node == null) {
-			System.out.println("Knoten 30" + " nicht gefunden.");
+			System.out.println("Knoten 20" + " nicht gefunden.");
 		}
 		System.out.println("Elternknoten von 50: " + tree.getParentNode(50).data);// 20
-		tree.insert(5);
-		System.out.println(tree.getNode(5).data);
 		System.out.println("Elternknoten von 5: " + tree.getParentNode(5).data);// 10
 
 	}
