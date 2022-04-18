@@ -35,7 +35,7 @@ public class BinTree {
 	 * @param x int value to search for
 	 * @return node that contains the value x (null if x does not exist in the tree)
 	 */
-	private Node getNode(int x) {
+	public Node getNode(int x) {
 		if (root == null || root.data == x) {
 			return root;
 		}
@@ -54,7 +54,7 @@ public class BinTree {
 	 * @param x    int value to search for
 	 * @return node that contains the value x
 	 */
-	private Node getNode(Node root, int x) {
+	public Node getNode(Node root, int x) {
 		if (root == null || root.data == x) {
 			return root;
 		}
