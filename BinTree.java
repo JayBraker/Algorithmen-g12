@@ -72,7 +72,7 @@ public class BinTree {
 	 * @param x int value for which to find the parent node
 	 * @return Node parent node of value x
 	 */
-	private Node getParentNode(int x) {
+	public Node getParentNode(int x) {
 		if (getNode(x) == null || root.data == x) {
 			return null;
 		}
@@ -87,7 +87,7 @@ public class BinTree {
 	 * @param x    int value for which to find the parent node
 	 * @return Node parent node of value x
 	 */
-	private Node getParentNode(Node node, int x) {
+	public Node getParentNode(Node node, int x) {
 		if (node.data==x) {
 			return node;
 		}
