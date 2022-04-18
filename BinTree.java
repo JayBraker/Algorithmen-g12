@@ -76,7 +76,7 @@ public class BinTree {
 		if (getNode(x) == null || root.data == x) {
 			return null;
 		}
-		return getParentNodeRec(root, x);
+		return getParentNode(root, x);
 
 	}
 
@@ -87,13 +87,13 @@ public class BinTree {
 	 * @param x    int value for which to find the parent node
 	 * @return Node parent node of value x
 	 */
-	private Node getParentNodeRec(Node node, int x) {
+	private Node getParentNode(Node node, int x) {
 		if (node.data==x) {
 			return node;
 		}
 		if (node.left_child != null) {
 			if (node.left_child.data > x) {
-				return getParentNodeRec(node.left_child, x);
+				return getParentNode(node.left_child, x);
 			}
 			else if (node.left_child.data == x) {
 				return node;
@@ -101,7 +101,7 @@ public class BinTree {
 		}
 		if (node.right_child != null && node.data < x) {
 			if (node.right_child.data < x) {
-				return getParentNodeRec(node.right_child, x);
+				return getParentNode(node.right_child, x);
 			}
 			else if (node.right_child.data == x) {
 				return node;
@@ -123,7 +123,7 @@ public class BinTree {
 		if (root == null) {
 			root = new Node(x);
 		} else {
-			insertRecursive(root, x);
+			insert(root, x);
 		}
 	}
 
@@ -134,18 +134,18 @@ public class BinTree {
 	 * @param x    int value to be inserted
 	 * @return node newly inserted node
 	 */
-	private void insertRecursive(Node node, int x) {
+	private void insert(Node node, int x) {
 		if (x < node.data) {
 			if (node.left_child == null) {
 				node.left_child = new Node(x);
 			} else {
-				insertRecursive(node.left_child, x);
+				insert(node.left_child, x);
 			}
 		} else if (x > node.data) {
 			if (node.right_child == null) {
 				node.right_child = new Node(x);
 			} else {
-				insertRecursive(node.right_child, x);
+				insert(node.right_child, x);
 			}
 		}
 	}
@@ -167,7 +167,7 @@ public class BinTree {
 		if (getNode(x) == null) {
 			throw new ArithmeticException("Value does not exist in the tree.");
 		}
-		removeRec(root, x);
+		remove(root, x);
 	}
 
 	/**
@@ -176,18 +176,17 @@ public class BinTree {
 	 * 
 	 * @param node Node starting point to search for the value
 	 * @param x    int value to be removed
-	 * @return node Node for recursion
 	 */
-	public Node removeRec(Node node, int x) {
+	private Node remove(Node node, int x) {
 		if (node == null) {
 			return node;
 		}
 		if (x < node.data) {
-			node.left_child = removeRec(node.left_child, x);
+			node.left_child = remove(node.left_child, x);
 			return node;
 
 		} else if (x > node.data) {
-			node.right_child = removeRec(node.right_child, x);
+			node.right_child = remove(node.right_child, x);
 			return node;
 
 		} else {
