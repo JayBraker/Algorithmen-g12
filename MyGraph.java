@@ -15,7 +15,7 @@ public class MyGraph extends Graph {
 	/**
 	 * inherited constructor
 	 * 
-	 * @param v int number of vertexes
+	 * @param v int number of vertices
 	 */
 	public MyGraph(int v) {
 		super(v);
@@ -24,7 +24,7 @@ public class MyGraph extends Graph {
 	/**
 	 * inherited constructor
 	 * 
-	 * @param v int number of vertexes
+	 * @param v int number of vertices
 	 * @param e int number of random edges
 	 */
 	public MyGraph(int i, int j) {
@@ -94,9 +94,10 @@ public class MyGraph extends Graph {
 
 	/**
 	 * broad first search traversal of the graph
+	 * We visit adjacent vertices in ascending order!
 	 * 
 	 * @param start vertex to start the search at
-	 * @return list of vertexes in their order of traversal
+	 * @return list of vertices in their order of traversal
 	 */
 	public ArrayList<Integer> bfs(int start) {
 		ArrayList<Integer> vertexList = new ArrayList<>();
@@ -111,8 +112,10 @@ public class MyGraph extends Graph {
 				vertexList.add(curr);
 				visited[curr] = true;
 			}
-			for (Iterator<Integer> j = this.getIt(curr); j.hasNext();) {
-				int subCurr = j.next();
+			ArrayList<Integer> adj = this.getAdjacent(curr);
+			Collections.sort(adj);
+	
+			for(Integer subCurr: adj) {
 				if (!visited[subCurr]) {
 					myQueue.add(subCurr);
 				}
@@ -123,6 +126,7 @@ public class MyGraph extends Graph {
 
 	/**
 	 * helper function for deep first search
+	 * We visit adjacent vertices in ascending order!
 	 * 
 	 * @param current vertex to start the search at
 	 * @param visited boolean list of which vertices have already been visited (=true)
@@ -135,8 +139,6 @@ public class MyGraph extends Graph {
 		ArrayList<Integer> adj = this.getAdjacent(start);
 		Collections.sort(adj);
 
-		//for (Iterator<Integer> j = this.getIt(start); j.hasNext();) {
-		//	int curr = j.next();
 		for(Integer curr: adj) {
 			if (!visited[curr])
 				dfs(curr, traversed, visited);
@@ -146,9 +148,10 @@ public class MyGraph extends Graph {
 	
 	/**
 	 * deep first search traversal of the graph
+	 * We visit adjacent vertices in ascending order!
 	 * 
 	 * @param start vertex to start the search at
-	 * @return list of vertexes in their order of traversal
+	 * @return list of vertices in their order of traversal
 	 */
 	public ArrayList<Integer> dfs(int start) {
 		ArrayList<Integer> vertexList = new ArrayList<>();
