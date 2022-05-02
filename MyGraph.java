@@ -60,16 +60,16 @@ public class MyGraph extends Graph {
 
 
 	/**
-	 * provides list of all vertexes of the graph
+	 * provides list of all vertices of the graph
 	 * 
-	 * @return list of vertexes
+	 * @return list of vertices
 	 */
 	public ArrayList<Integer> getVertexList() {
 		ArrayList<Integer> vertexList = new ArrayList<>();
 		vertexList.add(this.getVertexCount());
 		vertexList.add(this.getEdgeCount());
 
-		for (int i = 0; i < this.getVertexCount(); i++) {
+		for (int i = 1; i <= this.getVertexCount(); i++) {
 			vertexList.add(this.ausgangsgrad(i));
 			for (Iterator<Integer> j = this.getIt(i); j.hasNext();)
 				vertexList.add(j.next());
