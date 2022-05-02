@@ -1,21 +1,17 @@
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Deque;
 import java.util.Iterator;
 
 /**
- * Jedes Objekt dieser Klasse dient der Speicherung eines Graphen
- * mit Hilfe von Adjazenzlisten wie in der Vorlesung definiert.<br>
+ * Jedes Objekt dieser Klasse dient der Speicherung eines Graphen mit Hilfe von Adjazenzlisten wie
+ * in der Vorlesung definiert.<br>
  * Loesung zu algo-h06 im SS 2022.
  */
 public class MyGraph extends Graph {
-  //TODO: Die noetigen Konstruktoren implementieren
-  //TODO: Implementation der im Aufgabentext gewuenschten Operationen.
 
 	public MyGraph(int v) {
 		super(v);
-		//TODO Auto-generated constructor stub
+		// TODO Auto-generated constructor stub
 	}
 
 	public ArrayList<Integer> getEdgeList() {
@@ -35,7 +31,7 @@ public class MyGraph extends Graph {
 		ArrayList<Integer> vertexList = new ArrayList<>();
 		vertexList.add(this.getVertexCount());
 		vertexList.add(this.getEdgeCount());
-		
+
 		for (int i = 1; i <= this.getEdgeCount(); i++) {
 			vertexList.add(this.ausgangsgrad(i));
 			for (Iterator<Integer> j = this.getIt(i); j.hasNext();)
@@ -45,24 +41,24 @@ public class MyGraph extends Graph {
 	}
 
 	public int[][] getAdjacencyMatrix() {
-		int [][] adjMatr = new int[this.getVertexCount()][this.getVertexCount()];
+		int[][] adjMatr = new int[this.getVertexCount()][this.getVertexCount()];
 
 		for (int i = 1; i <= this.getEdgeCount(); i++) {
 			for (Iterator<Integer> j = this.getIt(i); j.hasNext();)
-				adjMatr[i][j.next()-1] = 1;
+				adjMatr[i][j.next() - 1] = 1;
 		}
 		return adjMatr;
 	}
 
 	public ArrayList<Integer> bfs(int start) {
 		ArrayList<Integer> vertexList = new ArrayList<>();
-		boolean[] visited = new boolean[this.getVertexCount()+1];
+		boolean[] visited = new boolean[this.getVertexCount() + 1];
 		ArrayDeque<Integer> myQueue = new ArrayDeque<Integer>();
-	
-	
+
+
 		myQueue.add(start);
 		visited[start] = true;
-		while(!myQueue.isEmpty()) {
+		while (!myQueue.isEmpty()) {
 			int curr = myQueue.poll();
 			visited[curr] = true;
 			for (Iterator<Integer> j = this.getIt(curr); j.hasNext();) {
@@ -80,7 +76,7 @@ public class MyGraph extends Graph {
 		for (Iterator<Integer> j = this.getIt(start); j.hasNext();) {
 			int curr = j.next();
 			if (!visited[curr])
-				dfs(curr, traversed);
+				dfs(curr, traversed, visited);
 		}
 	}
 
@@ -88,18 +84,18 @@ public class MyGraph extends Graph {
 		ArrayList<Integer> vertexList = new ArrayList<>();
 		boolean[] visited = new boolean[this.getVertexCount()];
 
-		dfs(vertexList, start);
-		
+		dfs(start, vertexList, visited);
+
 		return vertexList;
 	}
 
 	public ArrayList<Integer> getUnreachableVertices(int start) {
 		ArrayList<Integer> vertexList = new ArrayList<>();
 		boolean[] visited = new boolean[this.getVertexCount()];
-		dfs(new ArrayList<Integer>(), visited);
-		for(int i = 0; i < this.getVertexCount(); i++) {
-			if(!visited[i])
-				vertexList.add(i+1);
+		dfs(start, new ArrayList<Integer>(), visited);
+		for (int i = 0; i < this.getVertexCount(); i++) {
+			if (!visited[i])
+				vertexList.add(i + 1);
 		}
 
 		return vertexList;
