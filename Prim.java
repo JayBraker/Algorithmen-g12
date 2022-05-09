@@ -3,6 +3,7 @@ import java.util.PriorityQueue;
 
 /**
  * Implementation of Prims algorithm
+ * 
  * @author Christian Thelen, Laura Mey, Josha Bartsch
  */
 public class Prim {
@@ -28,6 +29,7 @@ public class Prim {
 
 		/**
 		 * When comparing two edges, account for their weight.
+		 * 
 		 * @param e
 		 * @return
 		 */
@@ -57,13 +59,13 @@ public class Prim {
 		int index = start;
 		int total = 0;
 
-		System.out.println(String.format("waehle %d als Wurzel", index+1));
+		System.out.println(String.format("waehle %d als Wurzel", index + 1));
 		for (int i = 0; i < edges.length; i++)
 			vertices.add(i); // Fill the set with an corresponding integer for every vertex present
 
 		/*
-		 * As the edges represent a non-directional graph, we assume every vertex is connected by at least 1 edge.
-		 * Thus we loop until every vertex was transferred into the spantree.
+		 * As the edges represent a non-directional graph, we assume every vertex is connected by at
+		 * least 1 edge. Thus we loop until every vertex was transferred into the spantree.
 		 */
 		while (!vertices.isEmpty()) {
 			for (int i = 0; i < edges[index].length; i++) {
@@ -73,13 +75,15 @@ public class Prim {
 				}
 			}
 			Edge vertex = edgeQ.poll(); // Get the cheapest edge
-			while (!vertices.contains(vertex.vertexB)) // If the destination is already present in the span tree
+			while (!vertices.contains(vertex.vertexB)) // If the destination is already present in the
+																									// span tree
 				vertex = edgeQ.poll(); // Skip to the next cheapest edge.
 			total += vertex.weight;
 			System.out.println(
 					String.format("Kante hinzugefuegt von %d zu %d", vertex.vertexA + 1, vertex.vertexB + 1));
 			index = vertex.vertexB;
-			vertices.remove(vertex.vertexA); // Make sure origin AND destination vertices are remove from the set
+			vertices.remove(vertex.vertexA); // Make sure origin AND destination vertices are remove from
+																				// the set
 			vertices.remove(vertex.vertexB);
 		}
 		return total;
@@ -88,6 +92,13 @@ public class Prim {
 	public static void main(String[] args) {
 		int[][] adjazenzmatrix = {{0, 3, 0, 2, 0, 0}, {3, 0, 2, 0, 3, 0}, {0, 2, 0, 1, 6, 0},
 				{2, 0, 1, 0, 0, 0}, {0, 3, 6, 0, 0, 5}, {0, 0, 0, 0, 5, 0}};
+		int[][] adjazenzmatrix2 =
+				{{0, 3, 0, 2, 6, 0, 0, 0, 0}, {3, 0, 5, 4, 0, 5, 0, 0, 4}, {0, 5, 0, 3, 0, 0, 0, 0, 0},
+						{2, 4, 3, 0, 0, 0, 0, 0, 0}, {6, 0, 0, 0, 0, 7, 0, 0, 0}, {0, 5, 0, 0, 7, 0, 8, 0, 0},
+						{0, 0, 0, 0, 0, 8, 0, 2, 3}, {0, 0, 0, 0, 0, 0, 2, 0, 1}, {0, 4, 0, 0, 0, 0, 3, 1, 0}};
+
 		System.out.println("resultierende kosten: " + Prim.getMST(adjazenzmatrix));
+		System.out.println("resultierende kosten: " + Prim.getMST(restart
+		));
 	}
 }
