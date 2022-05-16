@@ -10,7 +10,12 @@ public class Damenproblem {
 
 	public static void damenProblem(int brettgroesse) {
 		int[] brett_mit_damen = new int[brettgroesse];
-		damenProblem_rekursion(brett_mit_damen, 0);
+		if (!damenProblem_rekursion(brett_mit_damen, 0)) {
+			System.out.println("no solution found");
+		}
+		else {
+			System.out.println(Arrays.toString(brett_mit_damen));
+		}
 
 //		boolean[][] brett = new boolean[brettgroesse][brettgroesse];
 //
@@ -35,26 +40,25 @@ public class Damenproblem {
 	 * @param brett
 	 * @param col
 	 */
-	private static void damenProblem_rekursion(int[] brett, int col) {
-		if (brett[brett.length - 1] != 0) {
+	private static boolean damenProblem_rekursion(int[] brett, int col) {
+		if (col >= brett.length) {
 			System.out.println("here");
 			System.out.println(Arrays.toString(brett));
-			return;
+			return true;
 		}
-		for (int j = 1; j < brett.length+1; j++) {
-			System.out.println(j);
+		for (int row = 1; row < brett.length + 1; row++) {
+			System.out.println(row);
 			System.out.println(Arrays.toString(brett));
-			System.out.println(checkDamenposition(brett));
-			if (checkDamenposition(brett)) {
-				brett[col] = j;
+			if (checkDamenposition(brett, row, col)) {
+				brett[col] = row;
 				System.out.println(Arrays.toString(brett));
-				damenProblem_rekursion(brett, col+1);
-			} else {
+				if (damenProblem_rekursion(brett, col + 1)) {
+					return true;
+				}
 				brett[col] = 0;
 			}
-			
 		}
-
+		return false;
 	}
 
 //		if (spalte == brettgroesse) {
@@ -74,7 +78,7 @@ public class Damenproblem {
 //
 //		}
 //		return false;
-	
+
 	/**
 	 * checks if given solution works so that no queen can beat each other (neither
 	 * vertically/horizontally nor diagonally)
@@ -84,14 +88,15 @@ public class Damenproblem {
 	 * @return boolean true iff the solution works, false if queens can beat each
 	 *         other
 	 */
-	public static boolean checkDamenposition(int[] damenpositionen) {
+	public static boolean checkDamenposition(int[] damenpositionen, int row, int col) {
+		damenpositionen[col] = row;
 		boolean isOK = true;
 
 		for (int i = 0; i < damenpositionen.length; i++) {
 			for (int j = 0; j < i; j++) {
-				if (i != j && damenpositionen[i] != 0 && damenpositionen[j]!= 0) {
+				if (i != j && damenpositionen[i] != 0 && damenpositionen[j] != 0) {
 					// check for duplicate rows
-					if (damenpositionen[i] == damenpositionen[j] && i !=0) {
+					if (damenpositionen[i] == damenpositionen[j] && i != 0) {
 						System.out.println("duplicate");
 						return false;
 					}
