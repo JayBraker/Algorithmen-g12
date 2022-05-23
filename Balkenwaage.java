@@ -2,18 +2,19 @@ package ha9;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
  * HA 9
  * 
  * Class that provides solutions to a user who wants to measure a target weight
- * using a pan scale and specified measurement weights. 
+ * using a pan scale and specified measurement weights. *
  * 
  * @author Josha Bartsch, Christian Thelen, Laura Mey
  *
  */
-public class Balkenwaage {
+public class Balkenwaage_basket {
 
 	/**
 	 * helper function for a recursive call to check if weights can be used to
@@ -27,12 +28,40 @@ public class Balkenwaage {
 
 		if (Arrays.stream(result).sum() == target) {
 			// break condition for the recursion - return results
-			System.out.println(Arrays.toString(result));
-			int[] result_symmetric = new int[result.length];
+			System.out.print("(");
 			for (int i = 0; i < result.length; i++) {
-				result_symmetric[i] = (result[i] * (-1));
+				if (result[i] > 0) {
+					System.out.print("+" + result[i]);
+					if (i != result.length - 1) {
+						System.out.print(",");
+					}
+				}
+				if (result[i] < 0) {
+					System.out.print(result[i]);
+					if (i != result.length - 1) {
+						System.out.print(",");
+					}
+				}
 			}
-			System.out.println(Arrays.toString(result_symmetric));
+			System.out.println(")");
+			System.out.print("(");
+			for (int i = 0; i < result.length; i++) {
+				if (result[i] > 0) {
+					System.out.print("-" + result[i]);
+					if (i != result.length - 1) {
+						System.out.print(",");
+					}
+				}
+				if (result[i] < 0) {
+					System.out.print("+" + result[i]*-1);
+					if (i != result.length - 1) {
+						System.out.print(",");
+					}
+				}
+			}
+			System.out.println(")");
+
+			return;
 		}
 
 		if (!weights.isEmpty()) {
