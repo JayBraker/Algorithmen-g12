@@ -9,8 +9,8 @@ public class Waage {
     }
 
     public static void getWeightCombinations(ArrayList<String> basket, int cWeight, int weight, ArrayList<String> comb, int wIndex) {
-        if (cWeight == weight) {
-            basket.add(String.join(" ", comb));
+        if (Math.abs(cWeight) == weight) {
+            basket.add(String.join(", ", comb));
             return;
         } else if (wIndex < weights.length) {
             ArrayList<String> tList = new ArrayList<>(comb);
