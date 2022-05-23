@@ -13,14 +13,15 @@ public class Waage {
             basket.add(String.join(" ", comb));
             return;
         } else if (wIndex < weights.length) {
-            ArrayList<String> tList1 = new ArrayList<>(comb);
-            ArrayList<String> tList2 = new ArrayList<>(comb);
-            tList1.add((comb.size() > 0 ? "+": "") +String.valueOf(weights[wIndex]));
-            tList2.add(String.valueOf(-1*weights[wIndex]));
-
-            getWeightCombinations(basket, cWeight+weights[wIndex], weight, tList1, wIndex+1);
-            getWeightCombinations(basket, cWeight, weight, comb, wIndex+1);
-            getWeightCombinations(basket, cWeight-weights[wIndex], weight, tList2, wIndex+1);
+            ArrayList<String> tList = new ArrayList<>(comb);
+            tList.add((comb.size() > 0 ? "+": "") +String.valueOf(weights[wIndex]));
+            getWeightCombinations(basket, cWeight+weights[wIndex], weight, tList, wIndex+1);
+            
+            tList.remove(tList.size() - 1);
+            getWeightCombinations(basket, cWeight, weight, tList, wIndex+1);
+            
+            tList.add(String.valueOf(-1*weights[wIndex]));
+            getWeightCombinations(basket, cWeight-weights[wIndex], weight, tList, wIndex+1);
         } else 
             return;
     }
