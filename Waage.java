@@ -2,13 +2,39 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * HA 9
+ * 
+ * @author Josha Bartsch, Christian Thelen, Laura Mey
+ *
+ */
 public class Waage {
+    /*
+     * weights holds all available weights (metric gram)
+     */
     private final static int[] weights = {1, 3, 8, 20};
 
+    /**
+     * Determines through backtracking all possible combinations of weights from weights array which equal the value of oaram weight.
+     * By application only the absolute value of all weights added up matters:
+     * The sign determines whether a weight is placed on the left or right plate of the scale.
+     * 
+     * @param basket ArrayList collecting all valid combinations
+     * @param weight Target weight to be matched
+     */
     public static void getWeightCombinations(ArrayList<String> basket, int weight) {
         getWeightCombinations(basket, 0, weight, new ArrayList<>(), 0);
     }
 
+    /**
+     * Recursion helper
+     * 
+     * @param basket ArrayList collecting all valid combinations
+     * @param cWeight Current weight: Sum of all weights added so far
+     * @param weight Target weight to be matched
+     * @param comb ArrayList of all weights added so far (as Strings to keep the sign of positive weights)
+     * @param wIndex Current position in the weights array: Each weight may only be used once
+     */
     public static void getWeightCombinations(ArrayList<String> basket, int cWeight, int weight,
             ArrayList<String> comb, int wIndex) {
         if (Math.abs(cWeight) == weight) {
