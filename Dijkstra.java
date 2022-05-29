@@ -77,9 +77,11 @@ public class Dijkstra {
 	}
 
 	/**
-	 * Helper to print Array 
+	 * Helper to print an Array of Integers (no separators)
+	 * leftPads each number by final INDENT
+	 * 
 	 * @param arr
-	 * @return
+	 * @return Padded String
 	 */
 	private static String padArr(int[] arr) {
 		StringBuilder sb = new StringBuilder();
@@ -92,6 +94,11 @@ public class Dijkstra {
 		return sb.toString();
 	}
 
+	/**
+	 * Print table representing the dijkstra algorithm to stdio,
+	 * 
+	 * @param kanten
+	 */
 	public static void printDijkstra(int[] kanten) {
 		if (kanten.length < 1 || kanten.length % 3 != 1) // Check: Is Kantenliste valid
 			throw new IllegalArgumentException("Ungültige Kantenliste");
