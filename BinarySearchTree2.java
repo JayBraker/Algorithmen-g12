@@ -53,7 +53,7 @@ public class BinarySearchTree2 extends BinarySearchTree {
     TreeNode node = getNode(val);
     if (node != null)
       return ((double) node.getBranchSum())/node.getBranchSize();
-    else return 0;
+    throw new NoSuchElementException("Knoten " + val + " gibt es nicht!");
   }
 
   /**
