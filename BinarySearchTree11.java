@@ -241,7 +241,7 @@ public class BinarySearchTree11 {
 			parent.setTreesize(parent.getTreesize() - 1);// HA11
 			parent.setTreesum(parent.getTreesize() - node.getTreesum());// HA11
 		}
-		recalcTree(parent);//HA11
+		recalcTree(parent);// HA11
 	}
 
 	/**
@@ -256,7 +256,7 @@ public class BinarySearchTree11 {
 		node.setValue(kind.getValue()); // Inhalt des Kindes in den zu loeschenden
 		node.setLeft(kind.getLeft()); // Knoten kopieren, der damit faktisch
 		node.setRight(kind.getRight()); // verschwunden ist
-		recalcTree(node); //HA11
+		recalcTree(node); // HA11
 	}
 
 	/**
@@ -287,16 +287,17 @@ public class BinarySearchTree11 {
 
 		else // Schleife mindestens einmal durchlaufen?
 			elter.setLeft(ersatz.getRight()); // => neues linkes Kind im Elternknoten
-		
-		recalcTree(node); //HA11
-		recalcTree(elter); //HA11
+
+		recalcTree(node); // HA11
+		recalcTree(elter); // HA11
 
 	}
 
 	// HA11
 	/**
-	 * Berechne Anzahl und Summe von Unterbäumen für alle Knoten auf dem Weg zu dem übergebenen Knoten
-	 * neu aus
+	 * Berechne Anzahl und Summe von Unterbäumen für alle Knoten auf dem Weg zu dem
+	 * übergebenen Knoten neu aus
+	 * 
 	 * @param node
 	 */
 	public void recalcTree(TreeNode node) {
@@ -379,5 +380,78 @@ public class BinarySearchTree11 {
 		}
 		return node;
 	}
+	
+	  // Hilfsmethoden fuer `main'
 
+	  /**
+	   * Den uebergebenen binaeren Suchbaum mit den dahinter gegebenen
+	   * beliebig vielen ganzen Zahlen fuellen, die auch als Array
+	   * vorliegen duerfen.
+	   *
+	   * @param  baum   zu bevoelkernder Baum
+	   * @param  werte  variable Anzahl ganzzahliger Werte bzw. Array davon
+	   */
+	  public static void baumBauen(BinarySearchTree11 baum, int ... werte) {
+	    for (int wert: werte) {
+	      System.out.println(wert);
+	      baum.insert(wert);
+	    }
+	  }
+
+
+	/**
+	 * Den gegebenen binaeren Suchbaum mit den neuen Operationen testen.
+	 *
+	 * @param baum zu testender Baum
+	 */
+	public static void baumTesten(BinarySearchTree11 baum) {
+
+		baum.clear();
+		baumBauen(baum, 5, 3, 7, 1, 8);
+		// => Baum:
+		// 5
+		// 3 7
+		// 1 8
+		baum.show();
+		System.out.println(baum.getAverageOfSubtree(5));
+		System.out.println(baum.getAverageOfSubtree(3));
+		System.out.println(baum.getAverageOfSubtree(7));
+		
+		baum.insert(4);
+		baum.insert(6);
+		// => Baum:
+		// 5
+		// 3 7
+		// 1 4 6 8
+		baum.show();
+		System.out.println(baum.getAverageOfSubtree(5)); // 34/7
+		System.out.println(baum.getAverageOfSubtree(3)); // 4/2
+		System.out.println(baum.getAverageOfSubtree(7));
+
+		baum.remove(4);
+		// => Baum:
+		// 5
+		// 3 7
+		// 1 6 8
+		baum.show();
+		System.out.println(baum.getAverageOfSubtree(5));
+		System.out.println(baum.getAverageOfSubtree(3));
+		System.out.println(baum.getAverageOfSubtree(7));
+
+
+		baum.remove(5);
+		// => Baum:
+		// 6
+		// 3 7
+		// 1 8
+		baum.show();
+		System.out.println(baum.getAverageOfSubtree(3));
+		System.out.println(baum.getAverageOfSubtree(7));
+        System.out.println(baum.getAverageOfSubtree(8));
+
+	}
+
+	public static void main(String[] args) {
+		baumTesten(new BinarySearchTree11());
+	}
 }
