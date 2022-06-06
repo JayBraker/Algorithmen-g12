@@ -1,3 +1,5 @@
+package ha11;
+
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -81,7 +83,7 @@ public class BinarySearchTree11 {
 		public void setTreesum(int treesum) {
 			this.treesum = treesum;
 		}
-		
+
 		public int getTreesize() {
 			return this.treesize;
 		}
@@ -90,7 +92,6 @@ public class BinarySearchTree11 {
 			this.treesize = treesize;
 		}
 	}
-	
 
 	/** Baumwurzel */
 	protected TreeNode root;
@@ -107,13 +108,12 @@ public class BinarySearchTree11 {
 			throw new NoSuchElementException("Wert konnte im Baum nicht gefunden werden.");
 		}
 		TreeNode rootOfSubtree = this.getNode(val);
-		return rootOfSubtree.getTreesum()*1.0/rootOfSubtree.getTreesize();
+		return rootOfSubtree.getTreesum() * 1.0 / rootOfSubtree.getTreesize();
 	}
-	
 
 	/**
-	 * Einen neuen Datensatz in den binaeren Suchbaum einfuegen.
-	 * Angepasst: treesum & treesize updaten
+	 * Einen neuen Datensatz in den binaeren Suchbaum einfuegen. Angepasst: treesum
+	 * & treesize updaten
 	 *
 	 * @param data einzufuegender Datensatz
 	 * @return true: Datensatz wurde eingefuegt; false: Datensatz war schon
@@ -132,16 +132,16 @@ public class BinarySearchTree11 {
 					temp.setLeft(new TreeNode(data));
 					return true;
 				}
-				temp.setTreesize(temp.getTreesize() + 1); //HA 11
-				temp.setTreesum(temp.getTreesize()+data);//HA 11
+				temp.setTreesize(temp.getTreesize() + 1); // HA 11
+				temp.setTreesum(temp.getTreesize() + data);// HA 11
 				temp = temp.getLeft();
 			} else {
 				if (temp.getRight() == null) {
 					temp.setRight(new TreeNode(data));
 					return true;
 				}
-				temp.setTreesize(temp.getTreesize() - 1); //HA 11
-				temp.setTreesum(temp.getTreesize()+data);//HA 11
+				temp.setTreesize(temp.getTreesize() - 1); // HA 11
+				temp.setTreesum(temp.getTreesize() + data);// HA 11
 				temp = temp.getRight();
 			}
 		}
@@ -190,7 +190,6 @@ public class BinarySearchTree11 {
 			removeOneChild(node);
 	}
 
-
 	/**
 	 * Herausfinden, ob der gegebene Knoten ein Blatt ist.
 	 *
@@ -235,14 +234,14 @@ public class BinarySearchTree11 {
 			clear(); // => Baum nun leer
 		else if (parent.getLeft() == node) { // Knoten ist linkes Kind?
 			parent.setLeft(null); // => nun kein linkes Kind mehr da
-			parent.setTreesize(parent.getTreesize() -1); //HA11
-			parent.setTreesum(parent.getTreesize()-node.getTreesum()); //HA11
-		}
-		else {// Knoten ist rechtes Kind?
+			parent.setTreesize(parent.getTreesize() - 1); // HA11
+			parent.setTreesum(parent.getTreesize() - node.getTreesum()); // HA11
+		} else {// Knoten ist rechtes Kind?
 			parent.setRight(null); // => nun kein rechtes Kind mehr da
-			parent.setTreesize(parent.getTreesize() -1);//HA11
-			parent.setTreesum(parent.getTreesize()-node.getTreesum());//HA11
+			parent.setTreesize(parent.getTreesize() - 1);// HA11
+			parent.setTreesum(parent.getTreesize() - node.getTreesum());// HA11
 		}
+		recalcTree(parent);//HA11
 	}
 
 	/**
@@ -252,11 +251,12 @@ public class BinarySearchTree11 {
 	 */
 	private void removeOneChild(TreeNode node) {
 		TreeNode kind = (node.getLeft() != null) ? node.getLeft() : node.getRight();
-		node.setTreesize(kind.getTreesize());//HA11
-		node.setTreesum(kind.getTreesum());//HA11
+		node.setTreesize(kind.getTreesize());// HA11
+		node.setTreesum(kind.getTreesum());// HA11
 		node.setValue(kind.getValue()); // Inhalt des Kindes in den zu loeschenden
 		node.setLeft(kind.getLeft()); // Knoten kopieren, der damit faktisch
 		node.setRight(kind.getRight()); // verschwunden ist
+		recalcTree(node); //HA11
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class BinarySearchTree11 {
 	 *
 	 * @param node aus dem Baum zu entfernender Knoten
 	 */
-	protected void removeTwoChildren(TreeNode node) { //TODO
+	protected void removeTwoChildren(TreeNode node) { // TODO
 
 		// den Ersatzknoten fuer den zu entfernenden Knoten suchen, also
 		// den naechstgroesseren im rechten Teilbaum, gleichzeitig auch
@@ -284,30 +284,40 @@ public class BinarySearchTree11 {
 		// Der Ersatzknoten kann nun ausgehaengt werden:
 		if (elter == node) // Ist er Kind des zu entfernenden Knotens?
 			elter.setRight(ersatz.getRight()); // => neues rechtes Kind im Elternknoten
-			
+
 		else // Schleife mindestens einmal durchlaufen?
 			elter.setLeft(ersatz.getRight()); // => neues linkes Kind im Elternknoten
-	}
-	
-//	public void recalcTree() {
-//		recalcTree(root);
-//	}
-//	
-//	public void recalcTree(TreeNode node) {
-//		if (node.isLeaf)
-//		while (node.getLeft() != null) {
-//				node.setTreesize(node.getTreesize() + 1);
-//				node.setTreesum(node.getTreesum() + node.getLeft().getValue());
-//				node = node.getLeft();
-//		}
-//		while (node.getRight() != null) {
-//			node.setTreesize(node.getTreesize() + 1);
-//			node.setTreesum(node.getTreesum() + node.getRight().getValue());
-//			node = node.getRight();
-//		}
-//	}
+		
+		recalcTree(node); //HA11
+		recalcTree(elter); //HA11
 
-	
+	}
+
+	// HA11
+	/**
+	 * Berechne Anzahl und Summe von Unterbäumen für alle Knoten auf dem Weg zu dem übergebenen Knoten
+	 * neu aus
+	 * @param node
+	 */
+	public void recalcTree(TreeNode node) {
+		if (node == root) {
+			return;
+		}
+		TreeNode temp = root;
+		while (node.getValue() != temp.getValue()) {
+			if (temp.getValue() > node.getValue()) {
+				temp.setTreesize(temp.getTreesize() + 1); // HA 11
+				temp.setTreesum(temp.getTreesize() + node.getValue());// HA 11
+				temp = temp.getLeft();
+			} else {
+				temp.setTreesize(temp.getTreesize() - 1); // HA 11
+				temp.setTreesum(temp.getTreesize() + node.getValue());// HA 11
+				temp = temp.getRight();
+			}
+		}
+
+	}
+
 	/**
 	 * Herausfinden, ob ein gewisser Datensatz schon im binaeren Suchbaum enthalten
 	 * ist.
@@ -369,7 +379,5 @@ public class BinarySearchTree11 {
 		}
 		return node;
 	}
-
-
 
 }
