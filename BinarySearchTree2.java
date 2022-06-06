@@ -49,6 +49,13 @@ public class BinarySearchTree2 extends BinarySearchTree {
     return node;
   }
 
+  public double getAverageOfSubtree(int val) {
+    TreeNode node = getNode(val);
+    if (node != null)
+      return ((double) node.getBranchSum())/node.getBranchSize();
+    else return 0;
+  }
+
   /**
    * Loescht den Knoten mit dem Wert n iterativ, falls vorhanden.
    *
@@ -60,13 +67,17 @@ public class BinarySearchTree2 extends BinarySearchTree {
     TreeNode parent = null;       // Zeigerpaar aus Knoten und seinem
     TreeNode node   = this.root;  // Elter, beginnend bei der Wurzel
 
-    while (node != null) {
-      if (node.getValue() == n) { // Knoten mit n drin gefunden?
-        remove(node, parent);     // diesen Knoten aus dem Baum entfernen
-        return;                   // Knoten entfernt => Methode beenden
+    if (contains(n)) {
+      while (node != null) {
+        if (node.getValue() == n) { // Knoten mit n drin gefunden?
+          remove(node, parent);     // diesen Knoten aus dem Baum entfernen
+          return;                   // Knoten entfernt => Methode beenden
+        }
+        node.setBranchSize(node.getBranchSize() - 1);
+        node.setBranchSum(node.getBranchSum() - n);
+        parent = node;              // erstmal neuen Elter setzen
+        node   = nextNode(node, n); // im richtigen Teilbaum weitersuchen
       }
-      parent = node;              // erstmal neuen Elter setzen
-      node   = nextNode(node, n); // im richtigen Teilbaum weitersuchen
     }
     // regulaeres Schleifenende => Knoten nicht gefunden, Ausnahme:
     throw new ArithmeticException("Knoten " + n + " gibt es nicht!");
@@ -223,6 +234,7 @@ public class BinarySearchTree2 extends BinarySearchTree {
     //      3   7
     //    1  4 6  8
     baum.show();
+    System.out.println(baum.getAverageOfSubtree(5));
 
     baum.remove(4);
     // => Baum:
@@ -230,6 +242,7 @@ public class BinarySearchTree2 extends BinarySearchTree {
     //      3   7
     //    1    6  8
     baum.show();
+    System.out.println(baum.getAverageOfSubtree(5));
 
     baum.remove(5);
     // => Baum:
@@ -237,6 +250,7 @@ public class BinarySearchTree2 extends BinarySearchTree {
     //      3   7
     //    1       8
     baum.show();
+    System.out.println(baum.getAverageOfSubtree(6));
   }
 
   public static void main(String[] args) {
