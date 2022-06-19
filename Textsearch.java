@@ -1,119 +1,113 @@
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-//import java.util.regex.PatternSyntaxException;
+import java.util.Arrays;
 
-//Boyer Moore String Matching Algorithm Bad Character Heuristic (geeksforgeeks)
+/**
+ * Algorithmen & Datenstrukturen HA13
+ * 
+ * This class provides a nondeterministic finite automate that can check if a
+ * provided String can be described by a regular expression that is given as a
+ * list of edges of a graph.
+ *
+ * @author Laura Mey, Christian Thelen, Josha Bartsch
+ */
+public class NFA {
+	private ArrayList<String>[] adj;
+	private int vertex_count;
+	private int target;
 
-public class Textsearch {
+	/**
+	 * Constructor that takes an edge list as described in the assignment and
+	 * returns an adjacency list
+	 * 
+	 * @param x String of an edge list
+	 */
+	public NFA(String x) {
+		char[] input = x.toCharArray();
 
-	private static int max(int a, int b) {
-		return (a > b) ? a : b;
-	}
+		this.vertex_count = (int) input[0] - 48;
+		//System.out.println("vertexcount: " + this.vertex_count);
 
-	private static void badCharHeuristic(char[] str, int size, int badchar[]) {
-		for (int i = 0; i < 256; i++) {// 256 = number of chars
-			badchar[i] = -1;
+		this.adj = new ArrayList[vertex_count + 1];
+		for (int i = 0; i < vertex_count + 1; i++) {
+			this.adj[i] = new ArrayList<String>();
 		}
-		for (int i = 0; i < size; i++) {
-			badchar[(int) str[i]] = i;
+
+		this.target = (int) input[2] - 48;
+		//System.out.println("target: " + target);
+
+		for (int i = 4; i < input.length; i += 6) {
+			//System.out.println(i);
+			int currentnode = (int) input[i] - 48;
+			//System.out.println(currentnode);
+			this.adj[currentnode].add("" + input[i + 4] + ((int) input[i + 2] - 48));
+			//System.out.println(Arrays.toString(this.adj));
 		}
-	}
-//	
-//	public static ArrayList<Integer> textSearch(String text, String pattern){
-//		ArrayList<Integer> result = new ArrayList<>();
-//		char[] txt = text.toCharArray();
-//		char[] pat = pattern.toCharArray();
-//		int badchar[] = new int[256];
-//		badCharHeuristic(pat, pat.length, badchar);
-//		int shift = 0;
-//		while (shift <= (txt.length - pat.length)){
-//			int j = pat.length - 1;
-//			while (j >= 0 && (pat[j] == txt[shift+j] || pat[j] == '.')) {
-//				j--;
-//			}
-//			if (j < 0) {
-//				//System.out.println("Occurance: "+ shift);
-//				result.add(shift);
-//				shift += (shift+pat.length < txt.length)? pat.length-badchar[txt[shift+pat.length]] : 1;
-//			}
-//			else {
-//				shift += max(1, j - badchar[txt[shift+j]]);
-//			}
-//		}
-//		return result;
-//	}
-
-	public static ArrayList<Integer> textSearch(String text, String pattern) {
-		ArrayList<Integer> result = new ArrayList<>();
-		char[] txt = text.toCharArray();
-		char[] pat = pattern.toCharArray();
-		int badchar[] = new int[256];
-		badCharHeuristic(pat, pat.length, badchar);
-		int shift = 0;
-		while (shift <= (txt.length - pat.length)) {
-			int j = 0;
-			while (j < pat.length && (pat[j] == txt[shift + j] || pat[j] == '.' || pat[j] == '[' || pat[j] == '\\')) {
-
-				// Sonderfälle
-
-				if (pat[j] == '\\') {
-					if (pat[j + 1] == txt[shift + j]) {
-						j = j++;
-						continue;
-					} else {
-						break;
-					}
-
-				}
-
-				else if (pat[j] == '.') {
-					j++;
-					continue;
-				}
-
-				else if (pat[j] == '[') {
-					HashSet<Character> klammer = new HashSet<>();
-					int i = 0;
-					while (pat[j+i] != ']') {
-						klammer.add(pat[j+i]);
-						i++;
-					}
-					if (i == pat.length - 1) {
-						// throw new PatternSyntaxException("Unresolved brackets.");
-						throw new IllegalArgumentException("Unresolved brackets.");
-					}
-					if (klammer.contains(txt[shift + j])) {
-						j = j++;
-						continue;
-					}
-
-				}
-
-				j++;
-			}
-			if (j >= pat.length) {
-				// System.out.println("Occurance: "+ shift);
-				result.add(shift);
-				shift += (shift + pat.length < txt.length) ? pat.length - badchar[txt[shift + pat.length]] : 1;
-			} else {
-				shift += max(1, j - badchar[txt[shift + j]]);
-			}
-		}
-		return result;
 	}
 
 	/**
-	 * Testmethode
+	 * Tests if String s is matched by the regular expression
+	 * 
+	 * @param s String s to be checked
+	 * @return boolean true iff s is equivalent to the regular expression
+	 */
+	public boolean testString(String s) {
+		boolean[] nodes_occupied = new boolean[vertex_count + 1];
+		nodes_occupied[1] = true; // Startknoten
+		boolean regex = false;
+		char[] input = s.toCharArray();
+
+		for (char c : input) {
+			boolean[] nodes_occupied_old = nodes_occupied.clone();
+			nodes_occupied = new boolean[vertex_count + 1];
+			for (int i = 0; i < vertex_count + 1; i++) {
+				if (nodes_occupied_old[i] == true) {
+					for (int j = 0; j < adj[i].size(); j++) {
+						if (adj[i].get(j).startsWith("" + c)) {
+							int nextnode = (int) adj[i].get(j).charAt(1) - 48;
+							nodes_occupied[nextnode] = true;
+						}
+					}
+				}
+			}
+			//System.out.println(Arrays.toString(nodes_occupied));
+			if (areAllFalse(nodes_occupied)) {
+				regex = false;
+				break;
+			}
+
+		}
+		if (nodes_occupied[target] == true) {
+			regex = true;
+		}
+		return regex;
+
+	}
+
+	/**
+	 * helper function to check if all entries in a boolean array are false
+	 * 
+	 * @param array boolean array to be checked
+	 * @return true iff all entries are false
+	 */
+	public static boolean areAllFalse(boolean[] array) {
+		for (boolean b: array) {
+			if (b == true) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * test method (copied from assignment)
+	 * 
+	 * @param args
 	 */
 	public static void main(String[] args) {
-		System.out.println(textSearch("abcabcdababdc.", "ab")); // 0, 3, 7, 9
-		System.out.println(textSearch("abcabcdababdc.", "c.")); // 2, 5, 12
-		System.out.println(textSearch("abcabcdababdc.", "c\\.")); // 12
-		System.out.println(textSearch("abcabcdababdc.", "b[cd]")); // 1,4,10
-		System.out.println(textSearch("abcabcdababdc.", "a....c")); // 0,7
-		System.out.println(textSearch("a[aababa][ab]a", "a[ab]a")); // 3,5
-		System.out.println(textSearch("a[aababa][ab]a", "a.\\[a")); // 7
+		NFA nfa_test = new NFA("3,3,1,2,a,1,3,a,2,2,a,2,2,b,2,3,a");
+		System.out.println(nfa_test.testString("abba")); // true
+		System.out.println(nfa_test.testString("a")); // true
+		System.out.println(nfa_test.testString("ab")); // false
 	}
 
 }
